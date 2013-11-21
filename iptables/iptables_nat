@@ -1,0 +1,45 @@
+Chain PREROUTING (policy ACCEPT 173K packets, 18M bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     173K   18M prerouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2     149K   13M zone_lan_prerouting  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0           
+3    17925 4358K zone_wan_prerouting  all  --  eth0.1 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain INPUT (policy ACCEPT 5519 packets, 400K bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain OUTPUT (policy ACCEPT 3182 packets, 233K bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain POSTROUTING (policy ACCEPT 203 packets, 29144 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     151K   14M postrouting_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2       67 19570 zone_lan_nat  all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0           
+3     151K   14M zone_wan_nat  all  --  *      eth0.1  0.0.0.0/0            0.0.0.0/0           
+
+Chain postrouting_rule (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_lan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_rule (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain prerouting_wan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1       38  1691 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0           udp dpt:1194 
+
+Chain zone_lan_nat (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain zone_lan_prerouting (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     149K   13M prerouting_lan  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_nat (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     151K   14M MASQUERADE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_prerouting (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1    17925 4358K prerouting_wan  all  --  *      *       0.0.0.0/0            0.0.0.0/0           

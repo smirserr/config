@@ -1,0 +1,125 @@
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1      168 15793 ACCEPT     all  --  tun+   *       0.0.0.0/0            0.0.0.0/0           
+2     564K   80M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           ctstate RELATED,ESTABLISHED 
+3      128  9214 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+4      708 42480 syn_flood  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp flags:0x17/0x02 
+5    17585 1361K input_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+6    17585 1361K input      all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     528K   41M ACCEPT     all  --  tun+   *       0.0.0.0/0            0.0.0.0/0           
+2     571K  591M ACCEPT     all  --  *      tun+    0.0.0.0/0            0.0.0.0/0           
+3      18M   14G ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           ctstate RELATED,ESTABLISHED 
+4     282K   23M forwarding_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+5     282K   23M forward    all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+6        0     0 reject     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1      127 22806 ACCEPT     all  --  *      tun+    0.0.0.0/0            0.0.0.0/0           
+2     606K  622M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           ctstate RELATED,ESTABLISHED 
+3      128  9214 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+4     3502  394K output_rule  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+5     3502  394K output     all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain forward (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     282K   23M zone_lan_forward  all  --  br-lan *       0.0.0.0/0            0.0.0.0/0           
+2        0     0 zone_wan_forward  all  --  eth0.1 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain forwarding_lan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain forwarding_rule (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain forwarding_wan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain input (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1    12598  817K zone_lan   all  --  br-lan *       0.0.0.0/0            0.0.0.0/0           
+2     4986  545K zone_wan   all  --  eth0.1 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain input_lan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain input_rule (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain input_wan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1       39  1733 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0           udp dpt:1194 
+
+Chain output (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     3502  394K zone_lan_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2     2996  205K zone_wan_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain output_rule (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+
+Chain reject (5 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        6  1792 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           reject-with tcp-reset 
+2     4935  538K REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0           reject-with icmp-port-unreachable 
+
+Chain syn_flood (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1      708 42480 RETURN     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0           tcp flags:0x17/0x02 limit: avg 25/sec burst 50 
+2        0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1    12598  817K input_lan  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2    12598  817K zone_lan_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_ACCEPT (2 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1      506  189K ACCEPT     all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0           
+2    12598  817K ACCEPT     all  --  br-lan *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_DROP (0 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 DROP       all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0           
+2        0     0 DROP       all  --  br-lan *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_REJECT (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 reject     all  --  *      br-lan  0.0.0.0/0            0.0.0.0/0           
+2        0     0 reject     all  --  br-lan *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_lan_forward (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     282K   23M zone_wan_ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2        0     0 forwarding_lan  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+3        0     0 zone_lan_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        6  3456 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0           udp dpt:68 
+2        0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           icmp type 8 
+3     4980  541K input_wan  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+4     4941  540K zone_wan_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_ACCEPT (2 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     285K   23M ACCEPT     all  --  *      eth0.1  0.0.0.0/0            0.0.0.0/0           
+2        0     0 ACCEPT     all  --  eth0.1 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_DROP (0 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 DROP       all  --  *      eth0.1  0.0.0.0/0            0.0.0.0/0           
+2        0     0 DROP       all  --  eth0.1 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_REJECT (2 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 reject     all  --  *      eth0.1  0.0.0.0/0            0.0.0.0/0           
+2     4941  540K reject     all  --  eth0.1 *       0.0.0.0/0            0.0.0.0/0           
+
+Chain zone_wan_forward (1 references)
+num   pkts bytes target     prot opt in     out     source               destination         
+1        0     0 forwarding_wan  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+2        0     0 zone_wan_REJECT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
