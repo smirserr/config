@@ -1,0 +1,19 @@
+#####################
+debian: grub + gpt
+#####################
+1. Устанавливаем debian в обычном режиме
+2. Если используем LVM, то раздел boot (или если не создавали boot - корень) помещаем на  отдельный raid без lvm. Таким образом получаем два raid1:
+1) Под LVM group 
+2) Под /boot или /
+3. Загрузчик устанавливаем на третий диск разбитый под gpt или на флешку
+4. Загружаемся
+5. Выполняем команды из под root:
+apt-get install parted
+parted /dev/sda set 1 bios_grub on
+parted /dev/sdb set 1 bios_grub on
+grub-install /dev/sda
+grub-install /dev/sdb
+update-grub
+6. Выключаем, вынимаем диск/ флешку с загрузчиком
+7. Все 
+ 
