@@ -1,0 +1,17 @@
+
+
+#########ТАБЛИЦА filter########################
+# Очищаем все цепочки таблицы filter
+iptables -F
+
+#разрешить только установленные соединения
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# В качестве действия по умолчанию устанавливаем DROP 
+iptables -P INPUT DROP 
+
+# Разрешаем все исходящие пакеты
+iptables -P OUTPUT ACCEPT 
+
+# Запрещаем все проходящие пакеты
+iptables -P FORWARD DROP

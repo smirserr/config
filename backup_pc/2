@@ -1,0 +1,32 @@
+#!/bin/bash
+
+path="/home/serr/test/"
+mail="test@test.ru"
+pass="123"
+
+function backup
+{
+	
+	check=$(cd $1 && find ./* -maxdepth 0 -type d) 
+	if [ -z "$check" ]
+	then
+		echo "Не найдены бэкапы в каталоге $1"
+		echo "Отправляю сообщение об ошибке на адрес $mail"
+		exit
+	fi
+
+	echo 'Бэкапы найдены, приступаю к архивированнию'
+	echo '>>>>>>>>>>>>>>>>>>'
+	cd $1 && find ./* -maxdepth 0  -type d -exec /usr/bin/zip -r $(date +%y-%m-%d) {} \; #-exec rm -r {} \;
+	echo '>>>>>>>>>>>>>>>>>>'
+	echo 'Архивированние завершено'
+}
+
+cd $path && find ./* -name _autobackup > ${path}list_dir.txt
+
+while read line; do
+	$line2=${line##./}
+	#$line="${path}${line}"
+	#echo $line
+done < ${path}list_dir.txt
+
