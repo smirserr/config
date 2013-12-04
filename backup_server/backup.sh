@@ -45,7 +45,7 @@ echo "Приступаем $PCNAME" >> $LOG
 wakeonlan -p 8 $MAC
 sleep 200
 echo "Монтируем шару"
-#sudo mount -t cifs  '//'$1'.ds/C$' -o user=$USER,password=$PASSWORD,dom=$DOMAIN,sec=ntlm /mnt/backup_dir -v
+#if smbmount "//$PCNAME.DOMAIN/D$" $DIR_SOURSE -o username=$USER,password=$PASSWORD,domain=$DOMAIN then
 #монтируем шару
 if mount -t cifs  "//$PCNAME.$DOMAIN/D$" -o user=$USER,password=$PASSWORD,sec=ntlm $DIR_SOURCE -v; then
 	if [ $DOM = "01" ]; then
