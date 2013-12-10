@@ -51,6 +51,8 @@ echo "Montiruyem sharu"
 #mount -t cifs  "//$PCNAME.$DOMAIN/D$" -o user=$USER,password=$PASSWORD,sec=ntlm $DIR_SOURCE -v; then
 #montiruyem sharu
 cd $DIR_SOURCE
+mkdir -p $DIR_TARGET_MONTH
+mkdir -p $DIR_TARGET_DAY
 if smbmount "//$PCNAME.$DOMAIN/D$" $DIR_SOURCE -o username=$USER,password=$PASSWORD,domain=$PCNAME,iocharset=cp1251,codepage=cp866; then	
 	if [ $DOM = "06" ]; then
 		echo "Delayem polny bekap"
