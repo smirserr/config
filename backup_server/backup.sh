@@ -4,57 +4,56 @@
 #V ostalnye dni mesyatsa delayetsya tolko bekap izmeneny, t.e. inkrementny bekap.
 
 #!/bin/bash
+#############################################################################################
+
 #peredavayemye skriptu parametry
 MAC=$1
 PCNAME=$2
-DOMAIN=$3
-USER=$4
-PASSWORD=$5
+IP=$3
+DOMAIN=$4
+USER=$5
+PASSWORD=$6
 # imya i raspolozheniye programmy tar
 TAR=/bin/tar
 # Tip arkhivatora i rasshireniye. Vybrat libo gzip, libo bzip2
 #gzip
 arch_type=""
 arch_extension=""
-
 # pwd - tekushchy rabochy katalog
 #SCRIPT_DIR=`pwd`
-
 # Chto bekapim
 DIR_SOURCE="/mnt/backup_dir"
-
 EXCLUDE_FILE="/mnt/tcfi_local/_backups/backup_server/exclude_file"
-
-
 # Log-fayl
 LOG="/mnt/tcfi_local/_backups/backup.log"
-
 # Gde khranim bekapy. 
 DIR_TARGET_MONTH="/mnt/tcfi_local/_backups/$PCNAME/month"
 DIR_TARGET_DAY="/mnt/tcfi_local/_backups/$PCNAME/day"
-
 #Fayly inkrimenta
 increment="/mnt/tcfi_local/_backups/$PCNAME/increment.inc"
 increment_day="/mnt/tcfi_local/_backups/$PCNAME/increment_day.inc"
-
 PATH=/usr/local/bin:/usr/bin:/bin
 # tekushcheye chislo
 DOM=`date +%d`
+
+###########################################################################################
 
 #Vklyuchayem komp
 echo "$(date)" >> $LOG
 echo "Pristupayem $PCNAME"
 echo "Pristupayem $PCNAME" >> $LOG
-wakeonlan -p 8 $MAC
-sleep 330
+#wakeonlan -p 8 $MAC
+#sleep 330
 echo "Montiruyem sharu"
+
+#smbmount "//$PCNAME.$DOMAIN/D$" $DIR_SOURCE -o username=$USER,password=$PASSWORD,domain=$PCNAME,iocharset=cp1251,codepage=cp866; then
 #mount -t cifs  "//$PCNAME.$DOMAIN/D$" -o user=$USER,password=$PASSWORD,sec=ntlm $DIR_SOURCE -v; then
 #montiruyem sharu
 cd $DIR_SOURCE
 mkdir -p $DIR_TARGET_MONTH
 mkdir -p $DIR_TARGET_DAY
-if smbmount "//$PCNAME.$DOMAIN/D$" $DIR_SOURCE -o username=$USER,password=$PASSWORD,domain=$PCNAME,iocharset=cp1251,codepage=cp866; then	
-	if [ $DOM = "06" ]; then
+if mount -t cifs  "//$IP/D$" $DIR_SOURCE -o user=$USER,password=$PASSWORD,sec=ntlm,iocharset=cp1251 -v; then	
+	if [ $DOM = "01" ]; then
 		echo "Delayem polny bekap"
 		echo "Delayem polny bekap" >> $LOG
 	# esli pervoye chislo - delayem polny bekap, predvaritelno pereimenovav predydushchy mesyachny bekap, i udaliv ego inkrement
@@ -83,5 +82,5 @@ echo "Vyklyuchayem $PCNAME"
 echo "Vyklyuchayem $PCNAME" >>$LOG 
 echo "$(date)" >> $LOG
 echo "###############################" >> $LOG
-net rpc SHUTDOWN -I $PCNAME.$DOMAIN -f -U $PCNAME/$USER%$PASSWORD
+net rpc SHUTDOWN -I $IP -f -U $PCNAME/$USER%$PASSWORD
 
