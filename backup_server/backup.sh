@@ -19,10 +19,9 @@ TAR=/bin/tar
 #gzip
 arch_type=""
 arch_extension=""
-# pwd - tekushchy rabochy katalog
-#SCRIPT_DIR=`pwd`
 # Chto bekapim
 DIR_SOURCE="/mnt/backup_dir"
+#fail isklucheniy
 EXCLUDE_FILE="/mnt/tcfi_local/_backups/backup_server/exclude_file"
 # Log-fayl
 LOG="/mnt/tcfi_local/_backups/backup.log"
