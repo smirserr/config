@@ -5,7 +5,6 @@
 
 #!/bin/bash
 #############################################################################################
-
 #peredavayemye skriptu parametry
 MAC=$1
 PCNAME=$2
@@ -15,32 +14,27 @@ USER=$5
 PASSWORD=$6
 # imya i raspolozheniye programmy tar
 TAR=/bin/tar
-# Tip arkhivatora i rasshireniye. Vybrat libo gzip, libo bzip2
-#gzip
-arch_type=""
-arch_extension=""
 # Chto bekapim
 DIR_SOURCE="/mnt/backup_dir"
 #fail isklucheniy
-EXCLUDE_FILE="/mnt/tcfi_local/_backups/backup_server/exclude_file"
+EXCLUDE_FILE="/mnt/storage/_backups_pc/backup_server/exclude_file"
 # Log-fayl
-LOG="/mnt/tcfi_local/_backups/backup.log"
+LOG="/mnt/storage/_backups_pc/backup.log"
 # Gde khranim bekapy. 
-DIR_TARGET_MONTH="/mnt/tcfi_local/_backups/$PCNAME/month"
-DIR_TARGET_DAY="/mnt/tcfi_local/_backups/$PCNAME/day"
+DIR_TARGET_MONTH="/mnt/storage/_backups_pc/$PCNAME/month"
+DIR_TARGET_DAY="/mnt/storage/_backups_pc/$PCNAME/day"
 #Fayly inkrimenta
-increment="/mnt/tcfi_local/_backups/$PCNAME/increment.inc"
-increment_day="/mnt/tcfi_local/_backups/$PCNAME/increment_day.inc"
+increment="/mnt/storage/_backups_pc/$PCNAME/increment.inc"
+increment_day="/mnt/storage/_backups_pc/$PCNAME/increment_day.inc"
 PATH=/usr/local/bin:/usr/bin:/bin
 # tekushcheye chislo
 DOM=`date +%d`
-
 ###########################################################################################
 
-#Vklyuchayem komp
 echo "$(date)" >> $LOG
 echo "Pristupayem $PCNAME"
 echo "Pristupayem $PCNAME" >> $LOG
+#Vklyuchayem komp
 #wakeonlan -p 8 $MAC
 #sleep 330
 echo "Montiruyem sharu"
@@ -51,6 +45,7 @@ echo "Montiruyem sharu"
 cd $DIR_SOURCE
 mkdir -p $DIR_TARGET_MONTH
 mkdir -p $DIR_TARGET_DAY
+umount $DIR_SOURCE
 if mount -t cifs  "//$IP/D$" $DIR_SOURCE -o user=$USER,password=$PASSWORD,sec=ntlm,iocharset=cp1251 -v; then	
 	if [ $DOM = "01" ]; then
 		echo "Delayem polny bekap"
