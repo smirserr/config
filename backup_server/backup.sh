@@ -12,20 +12,20 @@ IP=$3
 DOMAIN=$4
 USER=$5
 PASSWORD=$6
-# imya i raspolozheniye programmy tar
+# raspolozheniye programmy tar
 TAR=/bin/tar
 # Chto bekapim
 DIR_SOURCE="/mnt/backup_dir"
 #fail isklucheniy
-EXCLUDE_FILE="/mnt/storage/_backups_pc/backup_server/exclude_file"
+EXCLUDE_FILE="/mnt/tcfi_local/_backups/backup_server/exclude_file"
 # Log-fayl
-LOG="/mnt/storage/_backups_pc/backup.log"
+LOG="/mnt/tcfi_local/_backups/backup.log"
 # Gde khranim bekapy. 
-DIR_TARGET_MONTH="/mnt/storage/_backups_pc/$PCNAME/month"
-DIR_TARGET_DAY="/mnt/storage/_backups_pc/$PCNAME/day"
+DIR_TARGET_MONTH="/mnt/tcfi_local/_backups/$PCNAME/month"
+DIR_TARGET_DAY="/mnt/tcfi_local/_backups/$PCNAME/day"
 #Fayly inkrimenta
-increment="/mnt/storage/_backups_pc/$PCNAME/increment.inc"
-increment_day="/mnt/storage/_backups_pc/$PCNAME/increment_day.inc"
+increment="/mnt/tcfi_local/_backups/$PCNAME/increment.inc"
+increment_day="/mnt/tcfi_local/_backups/$PCNAME/increment_day.inc"
 PATH=/usr/local/bin:/usr/bin:/bin
 # tekushcheye chislo
 DOM=`date +%d`
@@ -50,10 +50,11 @@ if mount -t cifs  "//$IP/D$" $DIR_SOURCE -o user=$USER,password=$PASSWORD,sec=nt
 	if [ $DOM = "01" ]; then
 		echo "Delayem polny bekap"
 		echo "Delayem polny bekap" >> $LOG
-	# esli pervoye chislo - delayem polny bekap, predvaritelno pereimenovav predydushchy mesyachny bekap, i udaliv ego inkrement
+		# esli pervoye chislo - delayem polny bekap, 
+		#predvaritelno pereimenovav predydushchy mesyachny bekap, i udaliv ego inkrement
 		mv $DIR_TARGET_MONTH/full.tar $DIR_TARGET_MONTH/full.tar.1
 		rm $increment
-		$TAR --create --ignore-failed-read --one-file-system --recursion --preserve-permissions --sparse --listed-incremental=$increment --verbose --file=$DIR_TARGET_MONTH/full.tar -X $EXCLUDE_FILE  $DIR_SOURCE
+		$TAR --create --ignore-failed-read --one-file-system --recursion --preserve-permissions --sparse --listed-incremental=$increment --verbose --file $DIR_TARGET_MONTH/full.tar -X $EXCLUDE_FILE  $DIR_SOURCE
 		# pereimenovyvayem dnevnye inkrementnye bekapy, starye bekapy udalyaem.
 		for i in $( find $DIR_TARGET_DAY/ -name "*tar.1" ); do rm -f $i; done
 		for i in $( find $DIR_TARGET_DAY/ -name "*tar" ); do mv $i $i.1; done
