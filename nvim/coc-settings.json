@@ -1,0 +1,7 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": ["python", "cpp", "c"],
+  "python.formatting.provider": "autopep8",
+  "python.formatting.blackPath": "/usr/bin/autopep8",
+  "clangd.path": "/usr/bin/clangd",
+  "coc.source.clangd.formatOnType": true
+}
